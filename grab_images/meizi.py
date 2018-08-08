@@ -3,6 +3,13 @@ import requests
 from bs4 import BeautifulSoup
 import os
 
+
+folder = os.getcwd()[:-4] + 'images/meizi/'
+#获取此py文件路径，在此路径选创建在new_folder文件夹中的test文件夹
+
+if not os.path.exists(folder):
+    os.makedirs(folder)
+
 headers = {
     'User-Agent': "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1"
 } ##浏览器请求头（大部分网站没有这个请求头会报错、请务必加上哦）
@@ -25,8 +32,13 @@ for a in all_a: ##这个不解释了。看不懂的小哥儿回去瞅瞅基础�
         for page in range(1, int(max_span)+1): ##不知道为什么这么用的小哥儿去看看基础教程吧
             page_url = href + '/' + str(page) ##同上
             headers['Referer'] = page_url
-            print(page_url) ##这个page_url就是每张图片的页面地址啦！但还不是实际地址！
+            # print(page_url) ##这个page_url就是每张图片的页面地址啦！但还不是实际地址！
             single_html = requests.get(page_url, headers=headers)
             single_soup = BeautifulSoup(single_html.text, 'lxml')
             img = single_soup.find('div', class_='main-image').find('img')
-            print(img['src'], img['alt'])
+            img_src = img['src']
+            # print(img['src'], img['alt'])
+            img_name = img_src.rsplit('/', 1)[1]
+            ir = requests.get(img_src, headers=headers)
+            if ir.status_code == 200:
+                open(folder + img_name, 'wb').write(ir.content)
