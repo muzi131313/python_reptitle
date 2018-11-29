@@ -18,6 +18,7 @@ start_html = requests.get(all_url, headers=headers)  ##使用requests中的get�
 # print(start_html.text) ##打印出start_html (请注意，concent是二进制的数据，一般用于下载图片、视频、音频、等多媒体内容是才使用concent, 对于打印网页内容请使用text)
 Soup = BeautifulSoup(start_html.text, 'lxml') ##使用BeautifulSoup来解析我们获取到的网页（‘lxml’是指定的解析器 具体请参考官方文档哦）
 all_a = Soup.find('div', class_='all').find_all('a') ##意思是先查找 class为 all 的div标签，然后查找所有的<a>标签
+# TODO: 有个old, 放到一个数组中去请求
 for a in all_a: ##这个不解释了。看不懂的小哥儿回去瞅瞅基础教程
     # print(a) ##同上
     title = a.get_text()
